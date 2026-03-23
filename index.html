@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<title>QR Access</title>
+
+<style>
+body{
+  margin:0;
+  background:#2f3347;
+  font-family:-apple-system;
+  text-align:center;
+  color:#fff;
+}
+
+.header{
+  padding:15px;
+  font-size:18px;
+  font-weight:600;
+}
+
+.name{
+  font-size:24px;
+  color:#f3d88a;
+  font-weight:bold;
+}
+
+.card{
+  width:90%;
+  max-width:350px;
+  margin:20px auto;
+  background:#fff;
+  border-radius:25px;
+  overflow:hidden;
+  position:relative;
+}
+
+.card:before,.card:after{
+  content:"";
+  position:absolute;
+  width:16px;
+  height:16px;
+  background:#2f3347;
+  border-radius:50%;
+  top:70px;
+}
+.card:before{left:-8px;}
+.card:after{right:-8px;}
+
+.yellow{
+  background:#ffb300;
+  color:#fff;
+  padding:14px;
+}
+
+.time{
+  font-size:22px;
+  font-weight:bold;
+  margin:15px 0;
+  color:#000;
+}
+
+.qr{
+  display:flex;
+  justify-content:center;
+}
+.qr img{
+  width:240px;
+}
+
+.refresh{
+  color:#999;
+}
+
+.count{
+  font-size:28px;
+  color:#00c853;
+  font-weight:bold;
+  margin:10px 0 20px;
+}
+
+.note{
+  padding:20px;
+  font-size:13px;
+  color:#cfcfcf;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">QR Access</div>
+
+<div class="name">Cà Văn Trọng (V26033954)</div>
+
+<div class="card">
+
+  <div class="yellow">
+    将二维码对准扫描器刷新出场
+  </div>
+
+  <div id="time" class="time"></div>
+
+  <div class="qr">
+    <img id="qrImg">
+  </div>
+
+  <div class="refresh">刷新二维码</div>
+
+  <div id="count" class="count">00:00:30</div>
+
+</div>
+
+<div class="note">
+尊敬的员工您好，您已进入企业涉密区域...
+</div>
+
+<script>
+function updateTime(){
+  let now = new Date();
+
+  let y = now.getFullYear();
+  let m = String(now.getMonth()+1).padStart(2,'0');
+  let d = String(now.getDate()).padStart(2,'0');
+
+  let h = String(now.getHours()).padStart(2,'0');
+  let min = String(now.getMinutes()).padStart(2,'0');
+  let s = String(now.getSeconds()).padStart(2,'0');
+
+  document.getElementById("time").innerText =
+    `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
+
+function generateQR(){
+  let data = Math.random().toString(36).substring(2);
+  let url = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${data}`;
+  document.getElementById("qrImg").src = url;
+}
+
+let sec = 30;
+
+function countdown(){
+  document.getElementById("count").innerText =
+    `00:00:${String(sec).padStart(2,'0')}`;
+
+  sec--;
+
+  if(sec < 0){
+    sec = 30;
+    generateQR();
+  }
+}
+
+setInterval(updateTime,1000);
+setInterval(countdown,1000);
+
+updateTime();
+generateQR();
+</script>
+
+</body>
+</html>
